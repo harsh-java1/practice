@@ -1,16 +1,25 @@
+
 pipeline {
     agent any
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Repository is available.'
+                echo 'Code checkout is handled by Jenkins SCM.'
             }
         }
 
         stage('Build and Test') {
             steps {
-                echo 'Build and test will run here.'
+                sh 'chmod +x mvnw'
+                sh './mvnw clean verify'
+            }
+        }
+
+        stage('Archive JAR') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar',
+                                 fingerprint: true
             }
         }
     }
